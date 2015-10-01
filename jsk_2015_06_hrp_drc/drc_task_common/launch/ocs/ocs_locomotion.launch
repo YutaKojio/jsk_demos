@@ -46,6 +46,7 @@ nodelets:
         min_size: 200
         angular_threshold: 0.01
         distance_threshold: 0.01
+        cluster_tolerance: 0.05
       </rosparam>
     </group>
     <group ns="obstacle_cloud">
@@ -62,14 +63,14 @@ nodelets:
       <remap from="~input/coefficients" to="plane_concatenator/output/coefficients" />
       <remap from="~input/leg_bounding_box" to="/robot_legs_bbox" />
       <rosparam>
-        resolution: 0.01
+        resolution: 0.03
         complete_footprint_region: false
         morphological_filter_size: 2
         # distance_threshold: 0.005
         distance_threshold: 0.025 # for jaxon
         magnify_distance: 0.05
         normal_threshold: 0.1
-        erode_filter_size: 1
+        erode_filter_size: 0
         footprint_frames: ["lleg_end_coords", "rleg_end_coords"]
       </rosparam>
     </node>
