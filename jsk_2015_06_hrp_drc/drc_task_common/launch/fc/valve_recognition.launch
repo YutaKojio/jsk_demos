@@ -1,9 +1,12 @@
 <launch>
-  <arg name="INPUT_IMAGE" default="/multisense/left/image_rect_color"/>
-  <arg name="INPUT_CAMERA_INFO" default="/multisense/left/camera_info"/>
-  <arg name="INPUT_POINT_CLOUD" default="/multisense/resize_1_4/points" />
+  <arg name="INPUT_IMAGE" default="/multisense_local/left/image_rect_color"/>
+  <arg name="INPUT_CAMERA_INFO" default="/multisense_local/left/camera_info"/>
+  <arg name="INPUT_POINT_CLOUD" default="/multisense_local/resize_1_4/points" />
   <arg name="DEBUG" default="false" />
+  <arg name="MANAGER" default="nodelet_manager" />
   <group ns="valve_recognition">
+    <node name="$(arg MANAGER)"
+          pkg="nodelet" type="nodelet" args="manager" />
     <node pkg="image_view2" type="image_view2" name="image_view2" if="$(arg DEBUG)">
       <remap from="image" to="$(arg INPUT_IMAGE)" />
       <remap from="$(arg INPUT_IMAGE)/screenrectangle" to="input_rect" />
@@ -90,7 +93,15 @@
           </rosparam>
     </node>
 
-    <group ns="normal_estimation" >
+    <group ns="cluster_decomposer" >
+      <rosparam>
+        align_boxes: true
+        align_boxes_with_plane: false
+        target_frame_id: BODY
+      </rosparam>
+    </group>
+
+     <group ns="normal_estimation" >
       <rosparam>
         k_search: 0
         radius_search: 0.05
@@ -111,6 +122,15 @@
         tolerance: 0.05
       </rosparam>
     </group>
+
+    <!-- <node name="walls" -->
+    <!--       pkg="nodelet" type="nodelet" -->
+    <!--       args="load jsk_pcl_utils/TfTransformBoundingBoxArray $(arg MANAGER)"> -->
+    <!--   <remap from="~input" to="cluster_decomposer/boxes" /> -->
+    <!--   <rosparam> -->
+    <!--     target_frame_id: BODY -->
+    <!--   </rosparam> -->
+    <!-- </node> -->
 
     <node pkg="drc_task_common"
           type="nearest_box_indices.py"
