@@ -97,7 +97,7 @@
       <rosparam>
         align_boxes: true
         align_boxes_with_plane: false
-        target_frame_id: BODY
+        target_frame_id: map
       </rosparam>
     </group>
 
@@ -123,14 +123,14 @@
       </rosparam>
     </group>
 
-    <!-- <node name="walls" -->
-    <!--       pkg="nodelet" type="nodelet" -->
-    <!--       args="load jsk_pcl_utils/TfTransformBoundingBoxArray $(arg MANAGER)"> -->
-    <!--   <remap from="~input" to="cluster_decomposer/boxes" /> -->
-    <!--   <rosparam> -->
-    <!--     target_frame_id: BODY -->
-    <!--   </rosparam> -->
-    <!-- </node> -->
+    <node name="walls"
+          pkg="nodelet" type="nodelet"
+          args="load jsk_pcl_utils/TfTransformBoundingBoxArray $(arg MANAGER)">
+      <remap from="~input" to="cluster_decomposer/boxes" />
+      <rosparam>
+        target_frame_id: BODY
+      </rosparam>
+    </node>
 
     <node pkg="drc_task_common"
           type="nearest_box_indices.py"
